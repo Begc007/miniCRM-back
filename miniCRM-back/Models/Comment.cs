@@ -1,4 +1,4 @@
 ﻿namespace miniCRM_back.Models {
-    public class Comment {
+    public class Comment:BaseEntity {
     }
 }
