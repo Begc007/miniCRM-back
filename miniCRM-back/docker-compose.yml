@@ -1,0 +1,17 @@
+﻿services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql2019
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=astanaMiniCRM2025!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
+    driver: local

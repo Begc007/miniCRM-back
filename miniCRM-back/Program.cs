@@ -1,6 +1,9 @@
 
 using Asp.Versioning;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using miniCRM_back.Configs;
+using miniCRM_back.Database;
 
 namespace miniCRM_back {
     public class Program {
@@ -36,24 +39,24 @@ namespace miniCRM_back {
             // for russian characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+            // In Program.cs or Startup.cs
+            builder.Services.AddDbContext<crmDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
 
 
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApiDocument();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment()) {
-                //app.MapOpenApi();
                 app.UseOpenApi();
-                // Add web UIs to interact with the document
-                // Available at: http://localhost:<port>/swagger
-                app.UseSwaggerUi(); // UseSwaggerUI Protected by if (env.IsDevelopment())
+                app.UseSwaggerUi();
             }
 
             app.UseHttpsRedirection();
