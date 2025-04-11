@@ -19,8 +19,11 @@ namespace miniCRM_back.Services {
             this.logger = logger;
             this.mapper = mapper;
         }
-        public Task<Result<TDto>> CreateAsync(TCreateDto createDto) {
-            throw new NotImplementedException();
+        public async Task<Result<TDto>> CreateAsync(TCreateDto createDto) {
+            var entity = mapper.Map<TEntity>(createDto);
+            var created = await repository.CreateAsync(entity);
+            var dto = mapper.Map<TDto>(created);
+            return Result<TDto>.Success(dto);
         }
 
         public Task DeleteAsync(int id) {

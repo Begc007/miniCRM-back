@@ -24,9 +24,23 @@ namespace miniCRM_back.Controllers {
                 return Ok(ApiResponse<IEnumerable<TaskItemDto>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
             }
             else {
-                return BadRequest(new { result.ErrorCode, result.ErrorMessage});
+                return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<TaskItemDto>>> Create(TaskItemForCreationDto taskItem) {
+            var result = await _service.CreateAsync(taskItem);
+            if (result.IsSuccess) {
+                return CreatedAtAction(nameof(Create), ApiResponse<TaskItemDto>.SuccessResponse(result.Value));
+            }
+            else {
+                return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage ));
+            }
+        }
+
+
+
         private static PaginationMetadata GetPaginationMetadata(PagedResult<IEnumerable<TaskItemDto>> result) {
             return new PaginationMetadata {
                 CurrentPage = result.Pagination.CurrentPage,
