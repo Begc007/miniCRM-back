@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using miniCRM_back.Configs;
 using miniCRM_back.Database;
+using miniCRM_back.Services;
+using System.Text.Json.Serialization;
 
 namespace miniCRM_back {
     public class Program {
@@ -45,8 +47,15 @@ namespace miniCRM_back {
 
 
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
+            // my DI
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(IBaseService<,,>), typeof(BaseService<,,>));
 
 
+            // avoid cyclic issues
+            builder.Services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            });
             // Add services to the container.
 
             builder.Services.AddControllers();

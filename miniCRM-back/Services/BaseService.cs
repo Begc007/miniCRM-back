@@ -14,7 +14,9 @@ namespace miniCRM_back.Services {
         protected readonly ILogger<BaseService<TEntity, TDto, TCreateDto>> logger;
         protected readonly IMapper mapper;
 
-        public BaseService(IMapper mapper) {
+        public BaseService(IGenericRepository<TEntity> repository, ILogger<BaseService<TEntity, TDto, TCreateDto>> logger, IMapper mapper) {
+            this.repository = repository;
+            this.logger = logger;
             this.mapper = mapper;
         }
         public Task<Result<TDto>> CreateAsync(TCreateDto createDto) {
@@ -25,8 +27,23 @@ namespace miniCRM_back.Services {
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<IEnumerable<TDto>>> GetAllAsync(PaginationParams paginationParams) {
-            throw new NotImplementedException();
+        public async Task<PagedResult<IEnumerable<TDto>>> GetAllAsync(PaginationParams paginationParams) {
+            try {
+                var totalCount = await repository.CountAsync();
+
+                var items = mapper.Map<IEnumerable<TDto>>(await repository.GetAllAsync(paginationParams));
+
+                var paginationMetadata = new PaginationMetadata {
+                    CurrentPage = paginationParams.PageNumber,
+                    PageSize = paginationParams.PageSize,
+                    TotalCount = totalCount,
+                    TotalPages = (int)Math.Ceiling(totalCount / (double)paginationParams.PageSize)
+                };
+
+                return PagedResult<IEnumerable<TDto>>.Success(items, paginationMetadata);
+            } catch (Exception ex) {
+                return PagedResult<IEnumerable<TDto>>.Failure("InternalServerError", ex.Message);
+            }
         }
 
         public Task<PagedResult<IEnumerable<TDto>>> GetAllWithIncludesAsync(PaginationParams paginationParams, params Expression<Func<TEntity, object>>[] includeProperties) {
