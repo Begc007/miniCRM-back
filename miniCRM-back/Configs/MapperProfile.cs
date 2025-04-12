@@ -8,7 +8,8 @@ namespace miniCRM_back.Configs {
         public MapperProfile() {
             CreateMap<TaskItem, TaskItemDto>().ReverseMap();
             CreateMap<TaskItem, TaskItemForCreationDto>().ReverseMap();
-
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserForCreationDto>().ReverseMap();
         }
     }
 }

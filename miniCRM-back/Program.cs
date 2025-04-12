@@ -1,10 +1,15 @@
-
+﻿
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using miniCRM_back.Configs;
 using miniCRM_back.Database;
+using miniCRM_back.Models.Auth;
 using miniCRM_back.Services;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace miniCRM_back {
@@ -40,6 +45,45 @@ namespace miniCRM_back {
             });
             // for russian characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            // authentication
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+            var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+
+            builder.Services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options => {
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings!.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+                };
+                options.Events = new JwtBearerEvents {
+                    OnChallenge = async context => {
+                        // Предотвращаем выполнение стандартного обработчика
+                        context.HandleResponse();
+
+                        // Устанавливаем код 401
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+
+                        var result = ApiResponse<object>.ErrorResponse(
+                            "AUTH_TOKEN_INVALID",
+                            "Токен авторизации недействителен или истёк"
+                        );
+
+                        await context.Response.WriteAsync(JsonSerializer.Serialize(result));
+                    }
+                };
+            });
+
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             // In Program.cs or Startup.cs
             builder.Services.AddDbContext<crmDbContext>(options =>
