@@ -42,18 +42,29 @@ namespace miniCRM_back.Controllers {
             return Ok(response);
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<PagedResult<IEnumerable<UserWithTaskItems>>>> GetAll(PaginationParams paginationParams) {
-            var result = await _userService.GetUsersWithTaskItems(paginationParams);
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<IEnumerable<TaskItemsGroupByUser>>>> GetAll(PaginationParams paginationParams) {
+            var result = await _userService.GetTaskItemsGroupByUser(paginationParams);
             if (result.IsSuccess) {
-                return Ok(ApiResponse<IEnumerable<UserWithTaskItems>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
+                return Ok(ApiResponse<IEnumerable<TaskItemsGroupByUser>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
             }
             else {
-                return BadRequest(ApiResponse<UserWithTaskItems>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+                return BadRequest(ApiResponse<TaskItemsGroupByUser>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
             }
         }
 
-        private static PaginationMetadata GetPaginationMetadata(PagedResult<IEnumerable<UserWithTaskItems>> result) { //TODO: make this method common into utils class since it is repeated in controllers
+        //[HttpGet("user/{userId}")]
+        //public async Task<ActionResult<PagedResult<IEnumerable<TaskItemsGroupByUser>>>> GetTaskItemsGroupByUser(PaginationParams paginationParams) {
+        //    var result = await _userService.GetTaskItemsGroupByUser(paginationParams);
+        //    if (result.IsSuccess) {
+        //        return Ok(ApiResponse<IEnumerable<TaskItemsGroupByUser>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
+        //    }
+        //    else {
+        //        return BadRequest(ApiResponse<TaskItemsGroupByUser>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+        //    }
+        //}
+
+        private static PaginationMetadata GetPaginationMetadata(PagedResult<IEnumerable<TaskItemsGroupByUser>> result) { //TODO: make this method common into utils class since it is repeated in controllers
             return new PaginationMetadata {
                 CurrentPage = result.Pagination.CurrentPage,
                 TotalPages = result.Pagination.TotalPages,
