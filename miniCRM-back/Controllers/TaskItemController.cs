@@ -28,7 +28,7 @@ namespace miniCRM_back.Controllers {
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemDto>>>> GetTasksByUserId(int userId,PaginationParams paginationParams) {
             var result = await _service.GetTasksByUserId(userId,paginationParams);
             if (result.IsSuccess) {

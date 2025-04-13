@@ -94,7 +94,11 @@ namespace miniCRM_back {
             // my DI
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped(typeof(ITaskRepository), typeof(TaskRepository));
+            builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+
+            // services
             builder.Services.AddScoped(typeof(IBaseService<,,>), typeof(BaseService<,,>));
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 
             // avoid cyclic issues

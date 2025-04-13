@@ -1,6 +1,9 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using miniCRM_back.Configs;
+using miniCRM_back.Database;
+using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 using miniCRM_back.Models.Auth;
 using miniCRM_back.Services;
@@ -10,16 +13,12 @@ namespace miniCRM_back.Controllers {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class UserController : ControllerBase {
-        //private readonly IBaseService<User, UserDto, UserForCreationDto> _service;
-        //private readonly ILogger<UserController> _logger;
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
-        public UserController(IAuthService authService) {
-            _authService = authService;
+        public UserController(IAuthService authService, IUserService userService) {
+            _authService = authService; _userService = userService;
         }
-        //public UserController(IBaseService<User, UserDto, UserForCreationDto> service, ILogger<UserController> logger) {
-        //    _service = service; _logger = logger;
-        //}
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(Models.Auth.LoginRequest request) {
@@ -41,6 +40,26 @@ namespace miniCRM_back.Controllers {
             }
 
             return Ok(response);
+        }
+
+        [HttpGet()]
+        public async Task<ActionResult<PagedResult<IEnumerable<UserWithTaskItems>>>> GetAll(PaginationParams paginationParams) {
+            var result = await _userService.GetUsersWithTaskItems(paginationParams);
+            if (result.IsSuccess) {
+                return Ok(ApiResponse<IEnumerable<UserWithTaskItems>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
+            }
+            else {
+                return BadRequest(ApiResponse<UserWithTaskItems>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
+
+        private static PaginationMetadata GetPaginationMetadata(PagedResult<IEnumerable<UserWithTaskItems>> result) { //TODO: make this method common into utils class since it is repeated in controllers
+            return new PaginationMetadata {
+                CurrentPage = result.Pagination.CurrentPage,
+                TotalPages = result.Pagination.TotalPages,
+                PageSize = result.Pagination.PageSize,
+                TotalCount = result.Pagination.TotalCount
+            };
         }
     }
 }

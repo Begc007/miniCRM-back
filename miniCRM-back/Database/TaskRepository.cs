@@ -17,7 +17,7 @@ namespace miniCRM_back.Database {
         public async Task<IEnumerable<TaskItem>> GetTasksByUserId(int userId, PaginationParams paginationParams) {
             IQueryable<TaskItem> query = GetQuery(userId);
 
-            query = GetQuery(paginationParams, query);
+            query = GetOrderByQuery(paginationParams, query);
 
             var tasks = await query
                 .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)

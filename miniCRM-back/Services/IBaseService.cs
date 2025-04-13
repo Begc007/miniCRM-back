@@ -1,4 +1,5 @@
 ﻿using miniCRM_back.Configs;
+using miniCRM_back.DTOs;
 using System.Linq.Expressions;
 
 namespace miniCRM_back.Services {
@@ -14,5 +15,6 @@ namespace miniCRM_back.Services {
         Task<Result<TDto>> GetByIdAsync(int id);
         Task<int> GetCountAsync();
         PaginationMetadata GetPaginationMetadata(PaginationParams paginationParams, int totalCount);
+        
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using miniCRM_back.Configs;
 using miniCRM_back.Database;
+using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 using System.Linq.Expressions;
 
@@ -68,5 +68,6 @@ namespace miniCRM_back.Services {
         public Task<Result<TDto>> UpdateAsync(TDto updateDto) {
             throw new NotImplementedException();
         }
+
     }
 }

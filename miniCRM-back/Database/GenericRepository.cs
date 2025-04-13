@@ -14,7 +14,7 @@ namespace miniCRM_back.Database {
             this.dbSet = context.Set<TEntity>();
         }
 
-        protected static IQueryable<TEntity> GetQuery(PaginationParams paginationParams, IQueryable<TEntity> query) {
+        protected static IQueryable<TEntity> GetOrderByQuery(PaginationParams paginationParams, IQueryable<TEntity> query) {
             if (string.IsNullOrEmpty(paginationParams.SortBy)) {
                 query = query.OrderBy(e => e.Id);
             }
@@ -51,7 +51,7 @@ namespace miniCRM_back.Database {
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(PaginationParams paginationParams) {
             var query = dbSet.AsQueryable();
-            query = GetQuery(paginationParams, query);
+            query = GetOrderByQuery(paginationParams, query);
             var entities = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
                 .Take(paginationParams.PageSize)
                 .ToListAsync();
@@ -60,7 +60,7 @@ namespace miniCRM_back.Database {
 
         public virtual async Task<IEnumerable<TEntity>> GetAllWithIncludesAsync(PaginationParams paginationParams, params Expression<Func<TEntity, object>>[] includeProperties) {
                 IQueryable<TEntity> query = dbSet;
-                query = GetQuery(paginationParams, query);
+                query = GetOrderByQuery(paginationParams, query);
 
                 foreach (var includeProperty in includeProperties) {
                     query = query.Include(includeProperty);
@@ -93,7 +93,7 @@ namespace miniCRM_back.Database {
 
         public async Task<IEnumerable<TEntity>> GetWithCustomQueryAsync(PaginationParams paginationParams, Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder) {
             var query = queryBuilder(dbSet);
-            var sortedQuery = GetQuery(paginationParams, query);
+            var sortedQuery = GetOrderByQuery(paginationParams, query);
             var entities = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
                                         .Take(paginationParams.PageSize).ToListAsync();
             return entities;
