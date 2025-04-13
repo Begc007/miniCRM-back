@@ -19,6 +19,7 @@ namespace miniCRM_back.Services {
             this.logger = logger;
             this.mapper = mapper;
         }
+
         public async Task<Result<TDto>> CreateAsync(TCreateDto createDto) {
             var entity = mapper.Map<TEntity>(createDto);
             var created = await repository.CreateAsync(entity);
@@ -35,18 +36,21 @@ namespace miniCRM_back.Services {
                 var totalCount = await repository.CountAsync();
 
                 var items = mapper.Map<IEnumerable<TDto>>(await repository.GetAllAsync(paginationParams));
-
-                var paginationMetadata = new PaginationMetadata {
-                    CurrentPage = paginationParams.PageNumber,
-                    PageSize = paginationParams.PageSize,
-                    TotalCount = totalCount,
-                    TotalPages = (int)Math.Ceiling(totalCount / (double)paginationParams.PageSize)
-                };
+                PaginationMetadata paginationMetadata = GetPaginationMetadata(paginationParams, totalCount);
 
                 return PagedResult<IEnumerable<TDto>>.Success(items, paginationMetadata);
             } catch (Exception ex) {
                 return PagedResult<IEnumerable<TDto>>.Failure("InternalServerError", ex.Message);
             }
+        }
+
+        public PaginationMetadata GetPaginationMetadata(PaginationParams paginationParams, int totalCount) {
+            return new PaginationMetadata {
+                CurrentPage = paginationParams.PageNumber,
+                PageSize = paginationParams.PageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)paginationParams.PageSize)
+            };
         }
 
         public Task<PagedResult<IEnumerable<TDto>>> GetAllWithIncludesAsync(PaginationParams paginationParams, params Expression<Func<TEntity, object>>[] includeProperties) {

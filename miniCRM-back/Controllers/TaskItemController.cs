@@ -11,9 +11,9 @@ namespace miniCRM_back.Controllers {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class TaskItemController : ControllerBase {
-        private readonly IBaseService<TaskItem,TaskItemDto, TaskItemForCreationDto> _service;
+        private readonly ITaskItemService _service;
         private readonly ILogger<TaskItemController> _logger;
-        public TaskItemController(IBaseService<TaskItem, TaskItemDto, TaskItemForCreationDto> service, ILogger<TaskItemController> logger) {
+        public TaskItemController(ITaskItemService service, ILogger<TaskItemController> logger) {
             _service = service; _logger = logger;
         }
 
@@ -21,6 +21,17 @@ namespace miniCRM_back.Controllers {
         public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemDto>>>> GetAll(PaginationParams paginationParams) {
             var result = await _service.GetAllAsync(paginationParams);
             if(result.IsSuccess) {
+                return Ok(ApiResponse<IEnumerable<TaskItemDto>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
+            }
+            else {
+                return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemDto>>>> GetTasksByUserId(int userId,PaginationParams paginationParams) {
+            var result = await _service.GetTasksByUserId(userId,paginationParams);
+            if (result.IsSuccess) {
                 return Ok(ApiResponse<IEnumerable<TaskItemDto>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
             }
             else {
@@ -38,8 +49,6 @@ namespace miniCRM_back.Controllers {
                 return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage ));
             }
         }
-
-
 
         private static PaginationMetadata GetPaginationMetadata(PagedResult<IEnumerable<TaskItemDto>> result) {
             return new PaginationMetadata {

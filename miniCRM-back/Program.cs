@@ -93,8 +93,9 @@ namespace miniCRM_back {
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             // my DI
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(ITaskRepository), typeof(TaskRepository));
             builder.Services.AddScoped(typeof(IBaseService<,,>), typeof(BaseService<,,>));
-
+            builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 
             // avoid cyclic issues
             builder.Services.AddControllers().AddJsonOptions(options => {

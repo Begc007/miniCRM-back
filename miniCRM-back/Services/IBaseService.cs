@@ -13,5 +13,6 @@ namespace miniCRM_back.Services {
         Task<PagedResult<IEnumerable<TDto>>> GetAllWithIncludesAsync(PaginationParams paginationParams, params Expression<Func<TEntity, object>>[] includeProperties);
         Task<Result<TDto>> GetByIdAsync(int id);
         Task<int> GetCountAsync();
+        PaginationMetadata GetPaginationMetadata(PaginationParams paginationParams, int totalCount);
     }
 }

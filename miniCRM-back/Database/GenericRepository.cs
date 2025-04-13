@@ -13,6 +13,19 @@ namespace miniCRM_back.Database {
             this.context = context;
             this.dbSet = context.Set<TEntity>();
         }
+
+        protected static IQueryable<TEntity> GetQuery(PaginationParams paginationParams, IQueryable<TEntity> query) {
+            if (string.IsNullOrEmpty(paginationParams.SortBy)) {
+                query = query.OrderBy(e => e.Id);
+            }
+            else {
+                query = paginationParams.SortDirection == "desc"
+                    ? query.OrderByDescending(e => EF.Property<object>(e, paginationParams.SortBy))
+                    : query.OrderBy(e => EF.Property<object>(e, paginationParams.SortBy));
+            }
+
+            return query;
+        }
         public async Task<int> CountAsync() {
             return await dbSet.CountAsync();
         }
@@ -35,18 +48,7 @@ namespace miniCRM_back.Database {
                 await context.SaveChangesAsync();
             }
         }
-        private static IQueryable<TEntity> GetQuery(PaginationParams paginationParams, IQueryable<TEntity> query) {
-            if (string.IsNullOrEmpty(paginationParams.SortBy)) {
-                query = query.OrderBy(e => e.Id);
-            }
-            else {
-                query = paginationParams.SortDirection == "desc"
-                    ? query.OrderByDescending(e => EF.Property<object>(e, paginationParams.SortBy))
-                    : query.OrderBy(e => EF.Property<object>(e, paginationParams.SortBy));
-            }
 
-            return query;
-        }
         public async Task<IEnumerable<TEntity>> GetAllAsync(PaginationParams paginationParams) {
             var query = dbSet.AsQueryable();
             query = GetQuery(paginationParams, query);
