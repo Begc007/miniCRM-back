@@ -28,8 +28,8 @@ namespace miniCRM_back.Services {
             return Result<TDto>.Success(dto);
         }
 
-        public virtual Task DeleteAsync(int id) {
-            throw new NotImplementedException();
+        public virtual async Task DeleteAsync(int id) {
+            await repository.DeleteAsync(id);
         }
 
         public virtual async Task<PagedResult<IEnumerable<TDto>>> GetAllAsync(PaginationParams paginationParams) {

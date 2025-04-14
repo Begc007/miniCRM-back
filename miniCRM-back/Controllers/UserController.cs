@@ -90,7 +90,14 @@ namespace miniCRM_back.Controllers {
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id) {
+            if (id <= 0) return BadRequest(ApiResponse<UserDto>.ErrorResponse("IdMismatch", "Id mismatch"));
 
+            await _userService.DeleteAsync(id);
+            
+            return NoContent();
+        }
         //[HttpGet("user/{userId}")]
         //public async Task<ActionResult<PagedResult<IEnumerable<TaskItemsGroupByUser>>>> GetTaskItemsGroupByUser(PaginationParams paginationParams) {
         //    var result = await _userService.GetTaskItemsGroupByUser(paginationParams);
