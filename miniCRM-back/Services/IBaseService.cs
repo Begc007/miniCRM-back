@@ -3,12 +3,13 @@ using miniCRM_back.DTOs;
 using System.Linq.Expressions;
 
 namespace miniCRM_back.Services {
-    public interface IBaseService<TEntity, TDto, TCreateDto>
+    public interface IBaseService<TEntity, TDto, TCreateDto, TUpdateDto>
         where TEntity : class
         where TDto : class
-        where TCreateDto : class {
+        where TCreateDto : class
+        where TUpdateDto: class {
         Task<Result<TDto>> CreateAsync(TCreateDto createDto);
-        Task<Result<TDto>> UpdateAsync(TDto updateDto);
+        Task<Result<TDto>> UpdateAsync(TUpdateDto updateDto);
         Task DeleteAsync(int id);
         Task<PagedResult<IEnumerable<TDto>>> GetAllAsync(PaginationParams paginationParams);
         Task<PagedResult<IEnumerable<TDto>>> GetAllWithIncludesAsync(PaginationParams paginationParams, params Expression<Func<TEntity, object>>[] includeProperties);

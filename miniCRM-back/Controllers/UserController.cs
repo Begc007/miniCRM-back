@@ -43,7 +43,7 @@ namespace miniCRM_back.Controllers {
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<IEnumerable<TaskItemsGroupByUser>>>> GetAll(PaginationParams paginationParams) {
+        public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemsGroupByUser>>>> GetAll(PaginationParams paginationParams) {
             var result = await _userService.GetTaskItemsGroupByUser(paginationParams);
             if (result.IsSuccess) {
                 return Ok(ApiResponse<IEnumerable<TaskItemsGroupByUser>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
@@ -52,6 +52,44 @@ namespace miniCRM_back.Controllers {
                 return BadRequest(ApiResponse<TaskItemsGroupByUser>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<UserDto>>> Create(UserForCreationDto dto) {
+            var result = await _userService.CreateAsync(dto);
+            if (result.IsSuccess) {
+                return Ok(ApiResponse<UserDto>.SuccessResponse(result.Value));
+            }
+            else {
+                return BadRequest(ApiResponse<UserDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponse<UserDto>>> Update(int id, UserForUpdateDto dto) {
+            if(id != dto.Id)return BadRequest(ApiResponse<UserDto>.ErrorResponse("IdMismatch", "Id mismatch"));
+
+            var result = await _userService.UpdateAsync(dto);
+            if (result.IsSuccess) {
+                return Ok(ApiResponse<UserDto>.SuccessResponse(result.Value));
+            }
+            else {
+                return BadRequest(ApiResponse<UserDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiResponse<UserDto>>> Get(int id) {
+            if (id <= 0) return BadRequest(ApiResponse<UserDto>.ErrorResponse("IdMismatch", "Id mismatch"));
+
+            var result = await _userService.GetByIdAsync(id);
+            if (result.IsSuccess) {
+                return Ok(ApiResponse<UserDto>.SuccessResponse(result.Value));
+            }
+            else {
+                return BadRequest(ApiResponse<UserDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
+
 
         //[HttpGet("user/{userId}")]
         //public async Task<ActionResult<PagedResult<IEnumerable<TaskItemsGroupByUser>>>> GetTaskItemsGroupByUser(PaginationParams paginationParams) {

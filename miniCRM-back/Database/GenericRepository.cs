@@ -20,8 +20,8 @@ namespace miniCRM_back.Database {
             }
             else {
                 query = paginationParams.SortDirection == "desc"
-                    ? query.OrderByDescending(e => EF.Property<object>(e, paginationParams.SortBy))
-                    : query.OrderBy(e => EF.Property<object>(e, paginationParams.SortBy));
+                    ? query.OrderByDescending(e => EF.Property<object>(e, paginationParams.SortBy.FirstCharToUpper()))
+                    : query.OrderBy(e => EF.Property<object>(e, paginationParams.SortBy.FirstCharToUpper()));
             }
 
             return query;
@@ -35,13 +35,13 @@ namespace miniCRM_back.Database {
             return await baseQuery.CountAsync();
         }
 
-        public async Task<TEntity> CreateAsync(TEntity entity) {
+        public virtual async Task<TEntity> CreateAsync(TEntity entity) {
             await dbSet.AddAsync(entity);
             await context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task DeleteAsync(int id) {
+        public virtual async Task DeleteAsync(int id) {
             var entity = await GetByIdAsync(id);
             if(entity is not null) {
                 dbSet.Remove(entity);
@@ -49,7 +49,7 @@ namespace miniCRM_back.Database {
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(PaginationParams paginationParams) {
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(PaginationParams paginationParams) {
             var query = dbSet.AsQueryable();
             query = GetOrderByQuery(paginationParams, query);
             var entities = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
@@ -75,7 +75,7 @@ namespace miniCRM_back.Database {
                 return entities;
             }
 
-        public async Task<TEntity?> GetByIdAsync(int id) {
+        public virtual async Task<TEntity?> GetByIdAsync(int id) {
             var entity = await dbSet.FindAsync(id);
             return entity;
         }
@@ -99,7 +99,7 @@ namespace miniCRM_back.Database {
             return entities;
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity TEntity) {
+        public virtual async Task<TEntity> UpdateAsync(TEntity TEntity) {
             dbSet.Update(TEntity);
             await context.SaveChangesAsync();
             return TEntity;

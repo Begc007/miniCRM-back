@@ -6,32 +6,33 @@ using miniCRM_back.Models;
 using System.Linq.Expressions;
 
 namespace miniCRM_back.Services {
-    public class BaseService<TEntity, TDto, TCreateDto> : IBaseService<TEntity, TDto, TCreateDto>
+    public class BaseService<TEntity, TDto, TCreateDto, TUpdateDto> : IBaseService<TEntity, TDto, TCreateDto, TUpdateDto>
         where TEntity : BaseEntity
         where TDto : class
-        where TCreateDto : class {
+        where TCreateDto : class
+        where TUpdateDto: class {
         protected readonly IGenericRepository<TEntity> repository;
-        protected readonly ILogger<BaseService<TEntity, TDto, TCreateDto>> logger;
+        protected readonly ILogger<BaseService<TEntity, TDto, TCreateDto, TUpdateDto>> logger;
         protected readonly IMapper mapper;
 
-        public BaseService(IGenericRepository<TEntity> repository, ILogger<BaseService<TEntity, TDto, TCreateDto>> logger, IMapper mapper) {
+        public BaseService(IGenericRepository<TEntity> repository, ILogger<BaseService<TEntity, TDto, TCreateDto, TUpdateDto>> logger, IMapper mapper) {
             this.repository = repository;
             this.logger = logger;
             this.mapper = mapper;
         }
 
-        public async Task<Result<TDto>> CreateAsync(TCreateDto createDto) {
+        public virtual async Task<Result<TDto>> CreateAsync(TCreateDto createDto) {
             var entity = mapper.Map<TEntity>(createDto);
             var created = await repository.CreateAsync(entity);
             var dto = mapper.Map<TDto>(created);
             return Result<TDto>.Success(dto);
         }
 
-        public Task DeleteAsync(int id) {
+        public virtual Task DeleteAsync(int id) {
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResult<IEnumerable<TDto>>> GetAllAsync(PaginationParams paginationParams) {
+        public virtual async Task<PagedResult<IEnumerable<TDto>>> GetAllAsync(PaginationParams paginationParams) {
             try {
                 var totalCount = await repository.CountAsync();
 
@@ -57,15 +58,22 @@ namespace miniCRM_back.Services {
             throw new NotImplementedException();
         }
 
-        public Task<Result<TDto>> GetByIdAsync(int id) {
+        public virtual async Task<Result<TDto>> GetByIdAsync(int id) {
+            try {
+                var entity = await repository.GetByIdAsync(id);
+                return entity is null
+                    ? Result<TDto>.Failure("NotFound", "Entity not found")
+                    : Result<TDto>.Success(mapper.Map<TDto>(entity));
+            } catch (Exception ex) {
+                return Result<TDto>.Failure("InternalServerError", ex.Message);
+            }
+        }
+
+        public virtual Task<int> GetCountAsync() {
             throw new NotImplementedException();
         }
 
-        public Task<int> GetCountAsync() {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<TDto>> UpdateAsync(TDto updateDto) {
+        public virtual Task<Result<TDto>> UpdateAsync(TUpdateDto updateDto) {
             throw new NotImplementedException();
         }
 

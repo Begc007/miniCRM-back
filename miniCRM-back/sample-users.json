@@ -1,0 +1,62 @@
+[
+  {
+    "username": "ivanov_ii",
+    "password": "pass123",
+    "fio": "Иванов Иван Иванович",
+    "position": "Директор"
+  },
+  {
+    "username": "petrov_pp",
+    "password": "secure456",
+    "fio": "Петров Павел Петрович",
+    "position": "Менеджер"
+  },
+  {
+    "username": "sidorov_sa",
+    "password": "pwd789",
+    "fio": "Сидоров Сергей Александрович",
+    "position": "Бухгалтер"
+  },
+  {
+    "username": "kozlov_mn",
+    "password": "koz2025",
+    "fio": "Козлов Михаил Николаевич",
+    "position": "Аналитик"
+  },
+  {
+    "username": "sokolov_av",
+    "password": "sokol111",
+    "fio": "Соколов Андрей Викторович",
+    "position": "Разработчик"
+  },
+  {
+    "username": "volkov_dm",
+    "password": "volk555",
+    "fio": "Волков Дмитрий Михайлович",
+    "position": "Руководитель отдела"
+  },
+  {
+    "username": "novikov_ai",
+    "password": "nov999",
+    "fio": "Новиков Артем Игоревич",
+    "position": "Специалист"
+  },
+  {
+    "username": "morozov_vp",
+    "password": "mrz333",
+    "fio": "Морозов Владимир Петрович",
+    "position": "Координатор"
+  },
+  {
+    "username": "popov_as",
+    "password": "pop777",
+    "fio": "Попов Алексей Сергеевич",
+    "position": "Консультант"
+  },
+  {
+    "username": "kuznetsov_rv",
+    "password": "kuz888",
+    "fio": "Кузнецов Роман Владимирович",
+    "position": "Инженер"
+  }
+]

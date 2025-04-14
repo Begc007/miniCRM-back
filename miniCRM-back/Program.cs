@@ -97,7 +97,7 @@ namespace miniCRM_back {
             builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
             // services
-            builder.Services.AddScoped(typeof(IBaseService<,,>), typeof(BaseService<,,>));
+            builder.Services.AddScoped(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 

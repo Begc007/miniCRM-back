@@ -8,5 +8,13 @@ namespace miniCRM_back.Database {
         public DbSet<User> Users { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Comment> Comments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Name)
+                .IsUnique();
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

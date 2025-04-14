@@ -5,9 +5,9 @@ using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 
 namespace miniCRM_back.Services {
-    public class TaskItemService : BaseService<TaskItem, TaskItemDto, TaskItemForCreationDto>, ITaskItemService {
+    public class TaskItemService : BaseService<TaskItem, TaskItemDto, TaskItemForCreationDto, TaskItemDto>, ITaskItemService {
         private readonly ITaskRepository _taskItemRepository;
-        public TaskItemService(ITaskRepository repository, ILogger<BaseService<TaskItem, TaskItemDto, TaskItemForCreationDto>> logger, IMapper mapper) : base(repository, logger, mapper) {
+        public TaskItemService(ITaskRepository repository, ILogger<BaseService<TaskItem, TaskItemDto, TaskItemForCreationDto, TaskItemDto>> logger, IMapper mapper) : base(repository, logger, mapper) {
             _taskItemRepository = repository;
         }
 

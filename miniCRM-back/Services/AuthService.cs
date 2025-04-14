@@ -85,7 +85,7 @@ namespace miniCRM_back.Services {
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private string HashPassword(string password) {
+        public static string HashPassword(string password) {
             // Используйте безопасный алгоритм хеширования
             // В реальном приложении лучше использовать BCrypt или Argon2
             using var sha256 = SHA256.Create();

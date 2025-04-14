@@ -4,8 +4,8 @@ using miniCRM_back.Models;
 
 namespace miniCRM_back.Database {
     public interface IUserRepository:IGenericRepository<User> {
-        Task<IEnumerable<UserWithTaskItems>> GetUsersWithTasks(PaginationParams paginationParams);
+        Task<(IEnumerable<UserWithTaskItems> data, int totalCount)> GetUsersWithTasks(PaginationParams paginationParams);
         Task<User?> GetUserWithTasks(int id);
-        Task<int> CountUsersWithTasks();
+        Task<(IEnumerable<TaskItemsGroupByUser> data, int totalCount)> GetTaskItemsGroupByUser(PaginationParams paginationParams);
     }
 }

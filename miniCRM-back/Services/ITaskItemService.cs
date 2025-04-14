@@ -3,7 +3,7 @@ using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 
 namespace miniCRM_back.Services {
-    public interface ITaskItemService:IBaseService<TaskItem, TaskItemDto, TaskItemForCreationDto> {
+    public interface ITaskItemService:IBaseService<TaskItem, TaskItemDto, TaskItemForCreationDto, TaskItemDto> {
         Task<PagedResult<IEnumerable<TaskItemDto>>> GetTasksByUserId(int userId, PaginationParams paginationParams);
     }
 }
