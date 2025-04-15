@@ -6,7 +6,6 @@ namespace miniCRM_back.Database {
         public crmDbContext(DbContextOptions<crmDbContext> options):base(options) {}
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {

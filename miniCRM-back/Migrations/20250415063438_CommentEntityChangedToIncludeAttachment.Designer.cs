@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using miniCRM_back.Database;
 
@@ -11,9 +12,11 @@ using miniCRM_back.Database;
 namespace miniCRM_back.Migrations
 {
     [DbContext(typeof(crmDbContext))]
-    partial class crmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250415063438_CommentEntityChangedToIncludeAttachment")]
+    partial class CommentEntityChangedToIncludeAttachment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

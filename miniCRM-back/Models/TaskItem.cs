@@ -9,7 +9,6 @@
         public int Complexity { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

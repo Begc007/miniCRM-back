@@ -11,6 +11,8 @@ namespace miniCRM_back.Configs {
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, UserForCreationDto>().ReverseMap();
             CreateMap<User, UserForUpdateDto>().ReverseMap();
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, CommentForCreateDto>().ReverseMap();
         }
     }
 }
