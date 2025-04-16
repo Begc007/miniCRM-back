@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using miniCRM_back.Configs;
 using miniCRM_back.DTOs;
 using miniCRM_back.Models;
-using miniCRM_back.Services;
+using miniCRM_back.Services.Contracts;
 using System.Collections.Generic;
 
 namespace miniCRM_back.Controllers {

@@ -4,6 +4,7 @@ using miniCRM_back.Configs;
 using miniCRM_back.Database;
 using miniCRM_back.DTOs;
 using miniCRM_back.Models;
+using miniCRM_back.Services.Contracts;
 
 namespace miniCRM_back.Services {
     public class CommentService : BaseService<Comment, CommentDto, CommentForCreateDto, CommentDto>, ICommentService {

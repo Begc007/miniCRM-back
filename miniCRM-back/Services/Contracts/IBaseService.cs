@@ -2,7 +2,7 @@
 using miniCRM_back.DTOs;
 using System.Linq.Expressions;
 
-namespace miniCRM_back.Services {
+namespace miniCRM_back.Services.Contracts {
     public interface IBaseService<TEntity, TDto, TCreateDto, TUpdateDto>
         where TEntity : class
         where TDto : class

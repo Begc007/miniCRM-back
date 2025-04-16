@@ -91,12 +91,14 @@ namespace miniCRM_back.Database {
             return entity;
         }
 
-        public async Task<IEnumerable<TEntity>> GetWithCustomQueryAsync(PaginationParams paginationParams, Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder) {
+        public async Task<(IEnumerable<TEntity> data, int totalCount)> GetWithCustomQueryAsync(PaginationParams paginationParams, Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder) {
             var query = queryBuilder(dbSet);
             var sortedQuery = GetOrderByQuery(paginationParams, query);
+            var totalCount = query.Count();
             var entities = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
                                         .Take(paginationParams.PageSize).ToListAsync();
-            return entities;
+            
+            return (entities, totalCount);
         }
 
         public virtual async Task<TEntity> UpdateAsync(TEntity TEntity) {

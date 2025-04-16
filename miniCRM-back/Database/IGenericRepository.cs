@@ -13,7 +13,7 @@ namespace miniCRM_back.Database {
             Task<int> CountAsync();
             Task<int> CountWithCustomQueryAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder);
             Task<IEnumerable<TEntity>> GetAllAsync(PaginationParams paginationParams);
-            Task<IEnumerable<TEntity>> GetWithCustomQueryAsync(PaginationParams paginationParams, Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder);
+            Task<(IEnumerable<TEntity> data, int totalCount)> GetWithCustomQueryAsync(PaginationParams paginationParams, Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder);
             Task<IEnumerable<TEntity>> GetAllWithIncludesAsync(PaginationParams paginationParams, params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

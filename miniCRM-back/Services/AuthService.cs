@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using miniCRM_back.Database;
 using miniCRM_back.Models;
 using miniCRM_back.Models.Auth;
+using miniCRM_back.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;

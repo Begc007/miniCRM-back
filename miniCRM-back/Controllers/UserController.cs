@@ -6,7 +6,7 @@ using miniCRM_back.Database;
 using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 using miniCRM_back.Models.Auth;
-using miniCRM_back.Services;
+using miniCRM_back.Services.Contracts;
 
 namespace miniCRM_back.Controllers {
     [ApiController]

@@ -2,7 +2,7 @@
 using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 
-namespace miniCRM_back.Services {
+namespace miniCRM_back.Services.Contracts {
     public interface ICommentService:IBaseService<Comment, CommentDto, CommentForCreateDto, CommentDto> {
         Task<Result<IEnumerable<CommentDto>>> GetByTaskIdAsync(int taskId);
         

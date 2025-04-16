@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using miniCRM_back.DTOs;
-using miniCRM_back.Services;
 using miniCRM_back.Models;
 using miniCRM_back.Configs;
+using miniCRM_back.Services.Contracts;
 
 namespace miniCRM_back.Controllers {
     [ApiController]
