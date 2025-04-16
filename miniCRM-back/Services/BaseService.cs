@@ -73,8 +73,14 @@ namespace miniCRM_back.Services {
             throw new NotImplementedException();
         }
 
-        public virtual Task<Result<TDto>> UpdateAsync(TUpdateDto updateDto) {
-            throw new NotImplementedException();
+        public virtual async Task<Result<TDto>> UpdateAsync(TUpdateDto updateDto) {
+            try {
+                var entity = mapper.Map<TEntity>(updateDto);
+                var updated = await repository.UpdateAsync(entity);
+                return Result<TDto>.Success(mapper.Map<TDto>(updated));
+            } catch (Exception ex) {
+                return Result<TDto>.Failure("InternalServerError", ex.Message);
+            }
         }
 
     }

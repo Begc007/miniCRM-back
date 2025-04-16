@@ -17,6 +17,17 @@ namespace miniCRM_back.Controllers {
             _service = service; _logger = logger;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiResponse<TaskItemDto>>> GetById(int id) {
+            var result = await _service.GetByIdAsync(id);
+            if(result.IsSuccess) {
+                return Ok(ApiResponse<TaskItemDto>.SuccessResponse(result.Value));
+            }
+            else {
+                return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
+        
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemDto>>>> GetAll(PaginationParams paginationParams) {
             var result = await _service.GetAllAsync(paginationParams);
@@ -50,6 +61,26 @@ namespace miniCRM_back.Controllers {
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id) {
+            if (id <= 0) return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse("IdMismatch", "Id mismatch"));
+            await _service.DeleteAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponse<TaskItemDto>>> Update(int id, TaskItemDto taskItem) {
+            if (id != taskItem.Id) {
+                return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse("IdMismatch", "Id mismatch"));
+            }
+            var result = await _service.UpdateAsync(taskItem);
+            if (result.IsSuccess) {
+                return Ok(ApiResponse<TaskItemDto>.SuccessResponse(result.Value));
+            }
+            else {
+                return BadRequest(ApiResponse<TaskItemDto>.ErrorResponse(result.ErrorCode, result.ErrorMessage));
+            }
+        }
         private static PaginationMetadata GetPaginationMetadata(PagedResult<IEnumerable<TaskItemDto>> result) {
             return new PaginationMetadata {
                 CurrentPage = result.Pagination.CurrentPage,

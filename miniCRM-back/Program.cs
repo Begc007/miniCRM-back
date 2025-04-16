@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using miniCRM_back.Configs;
 using miniCRM_back.Database;
+using miniCRM_back.DTOs;
 using miniCRM_back.Models.Auth;
 using miniCRM_back.Services;
 using System.Text;
@@ -100,6 +101,7 @@ namespace miniCRM_back {
             builder.Services.AddScoped(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
 
             // avoid cyclic issues
             builder.Services.AddControllers().AddJsonOptions(options => {

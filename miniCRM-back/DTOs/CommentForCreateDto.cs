@@ -5,12 +5,11 @@ namespace miniCRM_back.DTOs {
         public int UserId { get; set; }
         public required string Text { get; set; }
         public int TaskItemId { get; set; }
-        public TaskItem? TaskItem { get; set; }
 
         //Attachment
-        public required string FileName { get; set; }
-        public required string FilePath { get; set; }
-        public required string ContentType { get; set; }
-        public long Size { get; set; }
+        public string? FileName { get; set; }
+        public string? FilePath { get; set; }
+        public string? ContentType { get; set; }
+        public long? Size { get; set; }
     }
 }
