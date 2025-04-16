@@ -47,9 +47,9 @@ namespace miniCRM_back.Services {
             }
         }
 
-        public async Task<PagedResult<IEnumerable<TaskItemsGroupByUser>>> GetTaskItemsGroupByUser(PaginationParams paginationParams) {
+        public async Task<PagedResult<IEnumerable<TaskItemsGroupByUser>>> GetTaskItemsGroupByUser(PaginationParams paginationParams, string? fio) {
             try {
-                var result = await _userRepository.GetTaskItemsGroupByUser(paginationParams);
+                var result = await _userRepository.GetTaskItemsGroupByUser(paginationParams, fio);
 
                 var paginationMetadata = GetPaginationMetadata(paginationParams, result.totalCount);
                 

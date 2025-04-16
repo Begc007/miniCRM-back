@@ -32,9 +32,12 @@ namespace miniCRM_back.Database {
             return (data: tasks, totalCount);
         }
 
-        public async Task<(IEnumerable<TaskItemsGroupByUser> data, int totalCount)> GetTaskItemsGroupByUser(PaginationParams paginationParams) {
+        public async Task<(IEnumerable<TaskItemsGroupByUser> data, int totalCount)> GetTaskItemsGroupByUser(PaginationParams paginationParams, string? fio) {
             var query = _dbSet.AsQueryable();
             query = GetOrderByQuery(paginationParams, query);
+            if(fio is not null) {
+                query = query.Where(u => u.FIO.ToLower().Contains(fio.ToLower()));
+            }
             var usersTasks = await query.Include(u => u.TaskItems) //TODO: replace this query with GetTaskItemsQuery method
                 .SelectMany(u => u.TaskItems.DefaultIfEmpty(),
                             (u, ti) => new UserWithTaskItems {

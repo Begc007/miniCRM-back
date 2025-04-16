@@ -43,8 +43,8 @@ namespace miniCRM_back.Controllers {
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemsGroupByUser>>>> GetAll(PaginationParams paginationParams) {
-            var result = await _userService.GetTaskItemsGroupByUser(paginationParams);
+        public async Task<ActionResult<ApiResponse<IEnumerable<TaskItemsGroupByUser>>>> GetAll(PaginationParams paginationParams, string? fio = null) {
+            var result = await _userService.GetTaskItemsGroupByUser(paginationParams, fio);
             if (result.IsSuccess) {
                 return Ok(ApiResponse<IEnumerable<TaskItemsGroupByUser>>.SuccessResponse(result.Value, pagination: GetPaginationMetadata(result)));
             }

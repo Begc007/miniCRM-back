@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using miniCRM_back.Database;
+using miniCRM_back.DTOs;
 using miniCRM_back.Models;
 using miniCRM_back.Models.Auth;
 using miniCRM_back.Services.Contracts;
@@ -15,10 +17,12 @@ namespace miniCRM_back.Services {
     public class AuthService : IAuthService {
         private readonly crmDbContext _context;
         private readonly JwtSettings _jwtSettings;
+        private readonly IMapper _mapper;
 
-        public AuthService(crmDbContext context, IOptions<JwtSettings> jwtSettings) {
+        public AuthService(crmDbContext context, IOptions<JwtSettings> jwtSettings, IMapper mapper) {
             _context = context;
             _jwtSettings = jwtSettings.Value;
+            _mapper = mapper;
         }
 
         public async Task<AuthResponse?> LoginAsync(Models.Auth.LoginRequest request) {
@@ -34,6 +38,7 @@ namespace miniCRM_back.Services {
             return new AuthResponse {
                 Token = token,
                 Expiration = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+                User = _mapper.Map<UserDto>(user)
             };
         }
 
@@ -61,6 +66,7 @@ namespace miniCRM_back.Services {
             return new AuthResponse {
                 Token = token,
                 Expiration = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+                User = _mapper.Map<UserDto>(user)
             };
         }
 

@@ -18,7 +18,7 @@ namespace miniCRM_back.Controllers {
         }
 
         [HttpGet("expired-tasks")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ExpiredTaskItem>>>> GetExpiredTasks(PaginationParams paginationParams, bool includeBlankExpiredAt) {
+        public async Task<ActionResult<ApiResponse<IEnumerable<ExpiredTaskItem>>>> GetExpiredTasks(PaginationParams paginationParams, bool includeBlankExpiredAt = false) {
             var result = await _service.GetExpiredTasksAsync(paginationParams, includeBlankExpiredAt);
             if (result.IsSuccess) {
                 return ApiResponse<IEnumerable<ExpiredTaskItem>>
